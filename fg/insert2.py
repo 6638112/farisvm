@@ -7,7 +7,7 @@ from pymongo import MongoClient
 import sys
 
 connect = MongoClient("127.0.0.1", 27017)
-db = connect["url"]
+db = connect["farisvm"]
 callers = db["url"]
 
 argvs = sys.argv  

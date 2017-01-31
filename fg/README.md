@@ -32,5 +32,10 @@ scons --disable-warnings-as-errors --prefix=/usr/local install
 # set
 
 <pre>
-bash# python insert2.py urls2
+# time python insert3.py malwaredomains_full.txt
+
+real    0m3.581s
+user    0m2.264s
+sys     0m0.200s
+
 </pre>
