@@ -28,3 +28,9 @@ scons --disable-warnings-as-errors --prefix=/usr/local
 scons --disable-warnings-as-errors --prefix=/usr/local install
 
 </pre>
+
+# set
+
+<pre>
+bash# python insert2.py urls2
+</pre>
