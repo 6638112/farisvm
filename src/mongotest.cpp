@@ -1,15 +1,30 @@
 #include "farisvm.hpp"
 #include <cstdlib>
 #include <iostream>
+#include <string>
 
 #include "mongo/client/dbclient.h"
+
+#define CNTR 25000
+
+using namespace std;
+
+string string_trim(const string& str, const char* delim=" \t\r\n");
+string string_trim(const string& str, const char* delim)
+{
+  const int p1(str.find_first_not_of(delim));
+  if(p1 == string::npos){
+    return string();
+  }
+  const int p2(str.find_last_not_of(delim));
+  return str.substr(p1, p2 - p1 + 1);
+}
 
 int
 main(int argc, char *argv[])
 {
     farisvm vm;
-    using namespace std;
-    
+        
     mongo::client::initialize();          
 
     const char CR = '\r';
@@ -35,24 +50,27 @@ main(int argc, char *argv[])
       auto_ptr<mongo::DBClientCursor> cursor =
 	client.query(ns, mongo::BSONObj());
 
-      std::vector<farisvm::match_result> result[15000];
-      farisvm::query_uri query[15000];
+      std::vector<farisvm::match_result> result[CNTR];
+      farisvm::query_uri query[CNTR];
 
       query[0].set_uri("https://www.google.com/", "http://referer.com/");
       query[1].set_uri("http://example.com/index.html", "http://referer.com/");
       query[2].set_uri("http://example.com/index.swf", "http://referer.com/");
       
       counter = 3;
+      string url2;
+
       while(cursor->more()) {
 	mongo::BSONObj p = cursor->next();
 	mongo::OID oid = p["_id"].OID(); 
 	string url = p["url"].str();
-	cout << "url: " << url;
+	// cout << counter << ":" << "url: " << url << endl;
 
-	query[counter].set_uri(url, "http://referer.com/");
+	url2 = string_trim(string(url));
+	query[counter].set_uri(url2, "http://referer.com/");
 	counter++;
 
-	if(counter = 100)
+	if(counter > CNTR-1)
 	  break;
       }
 
@@ -62,69 +80,45 @@ main(int argc, char *argv[])
       auto_ptr<mongo::DBClientCursor> cursor2 =
 	client.query(ns2, mongo::BSONObj());
 
-      counter = 0;
+      // counter = 0;
       while(cursor2->more()) {
 	mongo::BSONObj p2 = cursor2->next();
 	mongo::OID oid = p2["_id"].OID(); 
 	std::string pattern = p2["pattern"].str();
-	cout << "pattern: " << pattern;
+	// cout << "pattern: " << pattern;
 
-	std::string pattern2;
+	string pattern2;
+	
 	for (std::string::const_iterator it = pattern2.begin();
 	     it != pattern2.end(); ++it) {
 	  if (*it != CR && *it != LF) {
 	    pattern += *it;
-	  }
-	  
-	} // while(cursor2->more()) {
-
-	cout << "pattern re: " << pattern2;
+	  }	  
+	}
+       
+	//pattern2 = pattern;
+	pattern2 = string_trim(string(pattern));
 	
-	// vm.add_rule(".swf|", "filter2.txt");
-	vm.add_rule(pattern2, "filter1.txt");
       }
 
     vm.add_rule("||example.com^index", "filter1.txt");
     vm.add_rule(".swf|", "filter2.txt");
-    vm.add_rule(".ru", "filter2.txt");
-        
-    vm.match(result, query, 1500);
+    vm.add_rule("||www.icrc.org", "filter1.txt");
 
-    for (int i = 0; i < 15000; i++) {
+    vm.match(result, query, CNTR-1);
+
+    for (int i = 0; i < 10; i++) {
         std::cout << query[i].get_uri() << std::endl;
         for (auto ret: result[i]) {
             std::cout << "  rule: " << ret.rule
                       << "\n  file: " << ret.file << std::endl;
         }
-        std::cout << std::endl;
+        // std::cout << std::endl;
     }
-
       
     } catch( const mongo::DBException &e ) {
       std::cout << "caught " << e.what() << std::endl;
     }                       
-
-    // do matching
-
-    /*
-    std::vector<farisvm::match_result> result[3];
-    farisvm::query_uri query[3];
-
-    query[0].set_uri("https://www.google.com/", "http://referer.com/");
-    query[1].set_uri("http://example.com/index.html", "http://referer.com/");
-    query[2].set_uri("http://example.com/index.swf", "http://referer.com/");
-
-    vm.match(result, query, 3);
-
-    for (int i = 0; i < 3; i++) {
-        std::cout << query[i].get_uri() << std::endl;
-        for (auto ret: result[i]) {
-            std::cout << "  rule: " << ret.rule
-                      << "\n  file: " << ret.file << std::endl;
-        }
-        std::cout << std::endl;
-    }
-    */
 
     return 0;
 }

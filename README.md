@@ -1,28 +1,14 @@
+# flockGazer leveraged by FARIS
+
+This repository is a sophisticated version of flockGazer which is leveraged by FARIS for URL classificaion.
+
 # FARIS: the FAst uniform Resource Identifier-Specific filter
 
-## What?
-
-  Uniform resource locator (URL) filtering is a fundamental technology for
+FARIS which stands for the FAst uniform Resource Identifier-Specific filter is a fundamental technology for
 intrusion detection, HTTP proxies,
 content distribution networks, content-centric networks, and many other application areas.
-Some applications adopt URL filtering
-to protect user privacy from malicious or insecure websites.
-AdBlock Plus is an example of a URL-filtering application, which filters
-sites that intend to steal sensitive information.
 
-Unfortunately, AdBlock Plus is implemented inefficiently,
-resulting in a slow application that consumes much memory.
-Although it provides a domain-specific language (DSL) to represent URLs,
-it internally uses regular expressions
-and does not take advantage of the benefits of the DSL.
-In addition, the number of filter rules become large, which makes matters worse.
-
-Thus, we propose the fast uniform resource identifier-specific filter,
-which is a domain-specific pseudo-machine for the DSL,
-to improve the performance of AdBlock Plus.
-Compared with a conventional implementation
-that internally adopts regular expressions,
-our proof-of-concept implementation is fast and small memory footprint.
+FARIS applies AdBlock Plus which can be improved in that a slow application that consumes much memory.
 
 ## How to Use
 
