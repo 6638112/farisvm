@@ -1,0 +1,9 @@
+python insert-pattern.py easylist_france.txt
+python insert-pattern.py easylist_germany.txt
+python insert-pattern.py easylist_italy.txt
+python insert-pattern.py easylist.txt
+python insert-pattern.py easyprivacy.txt
+python insert-pattern.py fanboy_annoyance.txt
+python insert-pattern.py japanese_tofu.txt
+python insert-pattern.py japanese.txt
+python insert-pattern.py malwaredomains_full.txt 
