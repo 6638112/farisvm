@@ -5,7 +5,7 @@
 
 #include "mongo/client/dbclient.h"
 
-#define CNTR 25000
+#define CNTR 498970
 
 using namespace std;
 
@@ -31,6 +31,7 @@ main(int argc, char *argv[])
     const char LF = '\n';
 
     static int counter = 0;
+    static int all = 0;
     
     // add filtering rules
     // vm.add_rule("||example.com^index", "filter1.txt");
@@ -69,7 +70,8 @@ main(int argc, char *argv[])
 	url2 = string_trim(string(url));
 	query[counter].set_uri(url2, "http://referer.com/");
 	counter++;
-
+	all++;
+	
 	if(counter > CNTR-1)
 	  break;
       }
@@ -98,7 +100,7 @@ main(int argc, char *argv[])
        
 	//pattern2 = pattern;
 	pattern2 = string_trim(string(pattern));
-	
+	all++;
       }
 
     vm.add_rule("||example.com^index", "filter1.txt");
@@ -107,6 +109,8 @@ main(int argc, char *argv[])
 
     vm.match(result, query, CNTR-1);
 
+    cout << "total: " << all << std::endl;
+    
     for (int i = 0; i < 10; i++) {
         std::cout << query[i].get_uri() << std::endl;
         for (auto ret: result[i]) {
