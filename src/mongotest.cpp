@@ -6,6 +6,7 @@
 #include "mongo/client/dbclient.h"
 
 #define CNTR 498970
+// #define CNTR 100000
 
 using namespace std;
 
@@ -51,8 +52,8 @@ main(int argc, char *argv[])
       auto_ptr<mongo::DBClientCursor> cursor =
 	client.query(ns, mongo::BSONObj());
 
-      std::vector<farisvm::match_result> result[CNTR];
-      farisvm::query_uri query[CNTR];
+      static std::vector<farisvm::match_result> result[CNTR];
+      static farisvm::query_uri query[CNTR];
 
       query[0].set_uri("https://www.google.com/", "http://referer.com/");
       query[1].set_uri("http://example.com/index.html", "http://referer.com/");
@@ -76,12 +77,15 @@ main(int argc, char *argv[])
 	  break;
       }
 
+      cout << "url total: " << all << std::endl;
+      
       const string ns2 = "farisvm.adblock";
       
       cout << "--- find2 ---" << endl;
       auto_ptr<mongo::DBClientCursor> cursor2 =
 	client.query(ns2, mongo::BSONObj());
 
+      all = 0;
       // counter = 0;
       while(cursor2->more()) {
 	mongo::BSONObj p2 = cursor2->next();
@@ -97,26 +101,30 @@ main(int argc, char *argv[])
 	    pattern += *it;
 	  }	  
 	}
-       
+
 	//pattern2 = pattern;
 	pattern2 = string_trim(string(pattern));
 	all++;
       }
 
-    vm.add_rule("||example.com^index", "filter1.txt");
-    vm.add_rule(".swf|", "filter2.txt");
-    vm.add_rule("||www.icrc.org", "filter1.txt");
+    cout << "adblock total: " << all << std::endl;
+      
+    //vm.add_rule("||example.com^index", "filter1.txt");
+    vm.add_rule("*.go.*", "1");
+    vm.add_rule("*gov.*", "2");
+    vm.add_rule("*swf|", "3");
 
     vm.match(result, query, CNTR-1);
 
-    cout << "total: " << all << std::endl;
+    // cout << "total: " << all << std::endl;
     
-    for (int i = 0; i < 10; i++) {
-        std::cout << query[i].get_uri() << std::endl;
+    for (int i = 0; i < CNTR-1; i++) {
+        
         for (auto ret: result[i]) {
 
 	  if(!ret.rule.empty() && !ret.file.empty())
 	    {
+	     std::cout << query[i].get_uri() << std::endl;
 	     std::cout << "  rule: " << ret.rule
                       << "\n  file: " << ret.file << std::endl;
 	    }
