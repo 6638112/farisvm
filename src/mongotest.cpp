@@ -110,8 +110,12 @@ main(int argc, char *argv[])
     for (int i = 0; i < 10; i++) {
         std::cout << query[i].get_uri() << std::endl;
         for (auto ret: result[i]) {
-            std::cout << "  rule: " << ret.rule
+
+	  if(!ret.rule.empty() && !ret.file.empty())
+	    {
+	     std::cout << "  rule: " << ret.rule
                       << "\n  file: " << ret.file << std::endl;
+	    }
         }
         // std::cout << std::endl;
     }
