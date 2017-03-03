@@ -23,9 +23,9 @@ while line:
         tmp = line.decode("utf8").split("apk:")
         #print tmp[1].rstrip()
         tmpstr = tmp[1].decode("utf8")
-        print tmpstr
+        print tmpstr.rstrip()
         
-        callers.insert( { 'url' : tmpstr, 'referer' : 'http://referer.com/' } )    
+        #callers.insert( { 'url' : tmpstr, 'referer' : 'http://referer.com/' } )    
         
     except:
         pass
