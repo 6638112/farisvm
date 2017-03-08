@@ -98,5 +98,11 @@ match.
 rules total: 15
 --- find ---
 apk-url total: 487363
+</pre>
+
+comparision with grep.
+
+<pre>
+# time python grep.py malwaredomains_full.txt 
 
 </pre>
