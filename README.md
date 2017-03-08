@@ -65,3 +65,38 @@ main(int argc, char *argv[])
 ## Publication
 
 Yuuki Takano and Ryosuke Miura, "FARIS: Fast and Memory-efficient URL Filter by Domain Specific Machine", IEEE International Conference on IT Convergence and Security 2016 (ICITCS 2016), Sep. 2016, ISBN 987-1-5090-3764-3, pp. 204-210.
+
+# measurement
+
+registering urls
+<xamp>
+# python out-url-2.py url-track-2014-08-27-01-drem
+</xamp>
+
+<pre>
+# pwd
+/home/flare/farisvm/tools
+
+# more insert.sh
+python insert-pattern.py easylist_france.txt
+python insert-pattern.py easylist_germany.txt
+python insert-pattern.py easylist_italy.txt
+python insert-pattern.py easylist.txt
+python insert-pattern.py easyprivacy.txt
+python insert-pattern.py fanboy_annoyance.txt
+python insert-pattern.py japanese_tofu.txt
+python insert-pattern.py japanese.txt
+python insert-pattern.py malwaredomains_full.txt
+
+</pre>
+
+match.
+
+<pre>
+~/farisvm/src# ./match
+--- find ---
+rules total: 15
+--- find ---
+apk-url total: 487363
+
+</pre>
